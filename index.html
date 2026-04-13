@@ -1,311 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Miles & Gwen — Across the Spider-Verse</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-  <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
-  </script>
-  <style>
-    :root {
-      --red:    #e8003a;
-      --pink:   #ff6eb4;
-      --cyan:   #00ffe1;
-      --dark:   #07060f;
-      --mid:    #110d22;
-      --white:  #f0eeff;
-      --font-display: 'Bebas Neue', sans-serif;
-      --font-body:    'Space Mono', monospace;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--dark);
-      color: var(--white);
-      font-family: var(--font-body);
-      overflow-x: hidden;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      overflow: hidden;
-    }
-
-    #canvas-wrap {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-    }
-
-    #canvas-wrap canvas { display: block; width: 100% !important; height: 100% !important; }
-
-    /* halftone overlay */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(232,0,58,.08) 1px, transparent 1px);
-      background-size: 28px 28px;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding-bottom: 48px;
-    }
-
-    .hero-text h1 {
-      font-family: var(--font-display);
-      font-size: clamp(4rem, 12vw, 10rem);
-      line-height: .9;
-      letter-spacing: .02em;
-      background: linear-gradient(135deg, var(--white) 30%, var(--pink) 70%, var(--cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: none;
-      animation: titlePop 1.2s cubic-bezier(.22,1,.36,1) both;
-    }
-
-    .hero-text p {
-      margin-top: 12px;
-      font-size: clamp(.65rem, 1.4vw, .85rem);
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      opacity: 0;
-      animation: fadeUp .8s .9s ease forwards;
-    }
-
-    .scroll-hint {
-      position: relative;
-      z-index: 2;
-      margin-bottom: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0;
-      animation: fadeUp .6s 1.4s ease forwards;
-    }
-    .scroll-hint span { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(240,238,255,.4); }
-    .scroll-hint .arrow {
-      width: 1px; height: 36px;
-      background: linear-gradient(to bottom, var(--cyan), transparent);
-      animation: arrowBounce 1.6s 1.8s ease-in-out infinite;
-    }
-
-    /* audio btn */
-    #audio-btn {
-      position: fixed;
-      top: 20px; right: 24px;
-      z-index: 999;
-      background: rgba(7,6,15,.7);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
-      font-family: var(--font-body);
-      font-size: .65rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      padding: 8px 16px;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: background .2s, color .2s;
-    }
-    #audio-btn:hover { background: var(--cyan); color: var(--dark); }
-
-    /* ── STORY SECTION ── */
-    #story {
-      position: relative;
-      padding: 0 0 120px;
-    }
-
-    .section-label {
-      text-align: center;
-      padding: 80px 0 40px;
-      font-size: .65rem;
-      letter-spacing: .4em;
-      text-transform: uppercase;
-      color: rgba(240,238,255,.3);
-    }
-
-    /* Each card slides in */
-    .card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      max-width: 1100px;
-      margin: 0 auto 100px;
-      padding: 0 32px;
-      opacity: 0;
-      transform: translateY(60px);
-      transition: opacity .8s ease, transform .8s ease;
-    }
-    .card.visible { opacity: 1; transform: translateY(0); }
-    .card:nth-child(even) { direction: rtl; }
-    .card:nth-child(even) > * { direction: ltr; }
-
-    .card-img {
-      position: relative;
-      overflow: hidden;
-    }
-    .card-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: saturate(1.15) contrast(1.05);
-      transition: transform .6s ease;
-    }
-    .card:hover .card-img img { transform: scale(1.04); }
-
-    /* glitch bar on left edge */
-    .card-img::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px; height: 100%;
-      background: linear-gradient(to bottom, var(--red), var(--pink), var(--cyan));
-      z-index: 2;
-    }
-
-    .card-body {
-      background: var(--mid);
-      padding: 48px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* dot grid bg */
-    .card-body::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 18px 18px;
-      pointer-events: none;
-    }
-
-    .card-num {
-      font-family: var(--font-display);
-      font-size: 6rem;
-      line-height: 1;
-      color: rgba(232,0,58,.12);
-      position: absolute;
-      bottom: 16px; right: 24px;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .card-tag {
-      font-size: .6rem;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 16px;
-    }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1;
-      margin-bottom: 20px;
-      color: var(--white);
-    }
-
-    .card-desc {
-      font-size: .75rem;
-      line-height: 1.9;
-      color: rgba(240,238,255,.6);
-      max-width: 380px;
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--red) 30%, var(--cyan) 70%, transparent);
-      margin: 0 auto 80px;
-      max-width: 800px;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      padding: 60px 24px;
-      font-size: .6rem;
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: rgba(240,238,255,.2);
-      border-top: 1px solid rgba(255,255,255,.06);
-    }
-    footer span { color: var(--pink); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes titlePop {
-      from { opacity: 0; transform: scale(.85) translateY(30px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes arrowBounce {
-      0%,100% { transform: scaleY(1); }
-      50%      { transform: scaleY(.6); }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
-      .card { grid-template-columns: 1fr; }
-      .card:nth-child(even) { direction: ltr; }
-      .card-img { height: 240px; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- Audio -->
-<audio id="bg-audio" loop src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/Post_Malone__Swae_Lee_-_Sunflower__ringtone_.mp3"></audio>
-<button id="audio-btn" aria-label="Toggle music">♪ Play Music</button>
-
-<!-- HERO -->
-<section id="hero">
-  <div id="canvas-wrap"></div>
-  <div class="hero-text">
-    <h1>Miles &amp; Gwen</h1>
-    <p>Across the Spider-Verse &nbsp;·&nbsp; Two worlds. One bond.</p>
-  </div>
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="arrow"></div>
-  </div>
-</section>
-
-<!-- STORY -->
-<section id="story">
-  <p class="section-label">Their Story</p>
-
-  <!-- Card 1 -->
+<!-- Card 1 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx.jpg" alt="Miles Morales swinging over Brooklyn Bridge" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx.jpg" alt="Miles Morales swinging over Brooklyn Bridge" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">01</span>
@@ -320,7 +16,7 @@
   <!-- Card 2 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__1_.jpg" alt="Miles, Gwen and Peter in city" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(1).jpg" alt="Miles, Gwen and Peter in city" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">02</span>
@@ -335,7 +31,7 @@
   <!-- Card 3 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__2_.jpg" alt="Miles giving Gwen a sunflower" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(2).jpg" alt="Miles giving Gwen a sunflower" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">03</span>
@@ -350,7 +46,7 @@
   <!-- Card 4 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__3_.jpg" alt="Gwen and Miles action art" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(3).jpg" alt="Gwen and Miles action art" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">04</span>
@@ -365,7 +61,7 @@
   <!-- Card 5 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__4_.jpg" alt="Miles and Gwen together on webs" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(4).jpg" alt="Miles and Gwen together on webs" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">05</span>
@@ -380,7 +76,7 @@
   <!-- Card 6 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__5_.jpg" alt="Miles and Gwen watching sunset" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(5).jpg" alt="Miles and Gwen watching sunset" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">06</span>
@@ -395,7 +91,7 @@
   <!-- Card 7 -->
   <div class="card">
     <div class="card-img">
-      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__6_.jpg" alt="Miles and Gwen resting back to back" loading="lazy"/>
+      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(6).jpg" alt="Miles and Gwen resting back to back" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">07</span>
@@ -404,201 +100,3 @@
       <p class="card-desc">Even heroes need to breathe. Back to back, exhausted but alive, Miles and Gwen remind us that the bravest thing isn't always the swing — sometimes it's simply staying.</p>
     </div>
   </div>
-
-</section>
-
-<footer>
-  <p>Fan tribute &nbsp;·&nbsp; <span>Spider-Man: Across the Spider-Verse</span> &nbsp;·&nbsp; Sony Pictures Animation</p>
-</footer>
-
-<!-- THREE.JS 3D MODEL VIEWER -->
-<script type="module">
-  import * as THREE from 'three';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-  const wrap = document.getElementById('canvas-wrap');
-  const W = wrap.clientWidth, H = wrap.clientHeight;
-
-  /* Scene */
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x07060f, 0.04);
-  scene.background = new THREE.Color(0x07060f);
-
-  /* Camera - Closeup view */
-  const cam = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
-  cam.position.set(0, 1.2, 3.5);
-
-  /* Renderer */
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-  renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowShadowMap;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  wrap.appendChild(renderer.domElement);
-
-  /* Controls */
-  const controls = new OrbitControls(cam, renderer.domElement);
-  controls.enablePan = false;
-  controls.minDistance = 2.5;
-  controls.maxDistance = 6;
-  controls.maxPolarAngle = Math.PI / 1.5;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = .8;
-  controls.target.set(0, 1, 0);
-
-  /* Lights - Enhanced for realism */
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-
-  const key = new THREE.DirectionalLight(0xff6eb4, 4);
-  key.position.set(5, 8, 5);
-  key.castShadow = true;
-  key.shadow.mapSize.width = 2048;
-  key.shadow.mapSize.height = 2048;
-  key.shadow.camera.far = 20;
-  scene.add(key);
-
-  const fill = new THREE.DirectionalLight(0x00ffe1, 2.5);
-  fill.position.set(-5, 4, -4);
-  scene.add(fill);
-
-  const rim = new THREE.PointLight(0xe8003a, 5, 15);
-  rim.position.set(0, -1, -4);
-  rim.castShadow = true;
-  scene.add(rim);
-
-  /* Realistic reflective floor */
-  const floorGeo = new THREE.CylinderGeometry(3, 3, 0.15, 64);
-  const floorMat = new THREE.MeshStandardMaterial({
-    color: 0x1a1830,
-    metalness: 0.85,
-    roughness: 0.15,
-    envMapIntensity: 1.5
-  });
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.receiveShadow = true;
-  floor.castShadow = true;
-  floor.position.y = -0.5;
-  scene.add(floor);
-
-  /* Rotating platform top */
-  const platformGeo = new THREE.CylinderGeometry(2.3, 2.3, 0.08, 64);
-  const platformMat = new THREE.MeshStandardMaterial({
-    color: 0x0d0a1a,
-    metalness: 0.95,
-    roughness: 0.2,
-    envMapIntensity: 1.2
-  });
-  const platform = new THREE.Mesh(platformGeo, platformMat);
-  platform.receiveShadow = true;
-  platform.castShadow = true;
-  platform.position.y = -0.04;
-  scene.add(platform);
-
-  /* Enhanced edge ring glow */
-  const ringGeo = new THREE.TorusGeometry(2.3, 0.03, 8, 100);
-  const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ffe1 });
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.rotation.x = Math.PI / 2;
-  ring.position.z = 0.05;
-  scene.add(ring);
-
-  /* Radial lines on platform */
-  for (let i = 0; i < 16; i++) {
-    const angle = (i / 16) * Math.PI * 2;
-    const pts = [
-      new THREE.Vector3(0, 0.05, 0),
-      new THREE.Vector3(Math.cos(angle) * 2.2, 0.05, Math.sin(angle) * 2.2)
-    ];
-    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xe8003a, transparent: true, opacity: .4 });
-    scene.add(new THREE.Line(lineGeo, lineMat));
-  }
-
-  /* Load GLB */
-  const loader = new GLTFLoader();
-  let model;
-  loader.load(
-    'https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/miles_y_gwen.glb',
-    (gltf) => {
-      model = gltf.scene;
-      model.traverse(c => { 
-        if (c.isMesh) { 
-          c.castShadow = true;
-          c.receiveShadow = true;
-        } 
-      });
-      
-      const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3());
-      const centre = box.getCenter(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 3.5 / maxDim;
-      model.scale.setScalar(scale);
-      model.position.sub(centre.multiplyScalar(scale));
-      model.position.y += .2;
-      scene.add(model);
-    },
-    undefined,
-    (err) => console.error('GLB load error:', err)
-  );
-
-  /* Particle field - enhanced */
-  const pCount = 400;
-  const pGeo = new THREE.BufferGeometry();
-  const pPos = new Float32Array(pCount * 3);
-  for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - .5) * 35;
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  const pMat = new THREE.PointsMaterial({ color: 0xff6eb4, size: .05, transparent: true, opacity: .6 });
-  scene.add(new THREE.Points(pGeo, pMat));
-
-  /* Resize */
-  window.addEventListener('resize', () => {
-    const w = wrap.clientWidth, h = wrap.clientHeight;
-    cam.aspect = w / h;
-    cam.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  });
-
-  /* Render loop */
-  const clock = new THREE.Clock();
-  (function animate() {
-    requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-    if (platform) platform.rotation.y = t * .3;
-    if (ring) ring.rotation.z = t * .15;
-    rim.intensity = 4 + Math.sin(t * 2) * 2;
-    controls.update();
-    renderer.render(scene, cam);
-  })();
-</script>
-
-<!-- SCROLL REVEAL -->
-<script>
-  const cards = document.querySelectorAll('.card');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
-  cards.forEach(c => io.observe(c));
-
-  /* Audio toggle */
-  const audio = document.getElementById('bg-audio');
-  const btn   = document.getElementById('audio-btn');
-  audio.volume = 0.3;
-  btn.addEventListener('click', () => {
-    if (audio.paused) { 
-      audio.play().catch(e => console.log('Audio play failed:', e)); 
-      btn.textContent = '♪ Pause Music'; 
-    }
-    else { 
-      audio.pause(); 
-      btn.textContent = '♪ Play Music'; 
-    }
-  });
-</script>
-
-</body>
-</html>
