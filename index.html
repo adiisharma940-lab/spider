@@ -282,7 +282,7 @@
 <body>
 
 <!-- Audio -->
-<audio id="bg-audio" loop src="assets/Post_Malone__Swae_Lee_-_Sunflower__ringtone_.mp3"></audio>
+<audio id="bg-audio" loop src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/Post_Malone__Swae_Lee_-_Sunflower__ringtone_.mp3"></audio>
 <button id="audio-btn" aria-label="Toggle music">♪ Play Music</button>
 
 <!-- HERO -->
@@ -305,7 +305,7 @@
   <!-- Card 1 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx.jpg" alt="Miles Morales swinging over Brooklyn Bridge" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx.jpg" alt="Miles Morales swinging over Brooklyn Bridge" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">01</span>
@@ -320,7 +320,7 @@
   <!-- Card 2 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__1_.jpg" alt="Miles, Gwen and Peter in city" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__1_.jpg" alt="Miles, Gwen and Peter in city" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">02</span>
@@ -335,7 +335,7 @@
   <!-- Card 3 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__2_.jpg" alt="Miles giving Gwen a sunflower" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__2_.jpg" alt="Miles giving Gwen a sunflower" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">03</span>
@@ -350,7 +350,7 @@
   <!-- Card 4 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__3_.jpg" alt="Gwen and Miles action art" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__3_.jpg" alt="Gwen and Miles action art" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">04</span>
@@ -365,7 +365,7 @@
   <!-- Card 5 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__4_.jpg" alt="Miles and Gwen together on webs" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__4_.jpg" alt="Miles and Gwen together on webs" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">05</span>
@@ -380,7 +380,7 @@
   <!-- Card 6 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__5_.jpg" alt="Miles and Gwen watching sunset" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__5_.jpg" alt="Miles and Gwen watching sunset" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">06</span>
@@ -395,7 +395,7 @@
   <!-- Card 7 -->
   <div class="card">
     <div class="card-img">
-      <img src="assets/peakpx__6_.jpg" alt="Miles and Gwen resting back to back" loading="lazy"/>
+      <img src="https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/peakpx__6_.jpg" alt="Miles and Gwen resting back to back" loading="lazy"/>
     </div>
     <div class="card-body">
       <span class="card-num">07</span>
@@ -423,74 +423,96 @@
   /* Scene */
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x07060f, 0.04);
+  scene.background = new THREE.Color(0x07060f);
 
-  /* Camera */
-  const cam = new THREE.PerspectiveCamera(45, W / H, 0.1, 200);
-  cam.position.set(0, 1.8, 6);
+  /* Camera - Closeup view */
+  const cam = new THREE.PerspectiveCamera(50, W / H, 0.1, 200);
+  cam.position.set(0, 1.2, 3.5);
 
   /* Renderer */
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFShadowShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   wrap.appendChild(renderer.domElement);
 
   /* Controls */
   const controls = new OrbitControls(cam, renderer.domElement);
   controls.enablePan = false;
-  controls.minDistance = 3;
-  controls.maxDistance = 10;
-  controls.maxPolarAngle = Math.PI / 1.7;
+  controls.minDistance = 2.5;
+  controls.maxDistance = 6;
+  controls.maxPolarAngle = Math.PI / 1.5;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = .6;
+  controls.autoRotateSpeed = .8;
   controls.target.set(0, 1, 0);
 
-  /* Lights */
-  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+  /* Lights - Enhanced for realism */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-  const key = new THREE.DirectionalLight(0xff6eb4, 3.5);
-  key.position.set(4, 6, 4);
+  const key = new THREE.DirectionalLight(0xff6eb4, 4);
+  key.position.set(5, 8, 5);
   key.castShadow = true;
+  key.shadow.mapSize.width = 2048;
+  key.shadow.mapSize.height = 2048;
+  key.shadow.camera.far = 20;
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0x00ffe1, 2);
-  fill.position.set(-4, 3, -3);
+  const fill = new THREE.DirectionalLight(0x00ffe1, 2.5);
+  fill.position.set(-5, 4, -4);
   scene.add(fill);
 
-  const rim = new THREE.PointLight(0xe8003a, 4, 12);
-  rim.position.set(0, -1, -3);
+  const rim = new THREE.PointLight(0xe8003a, 5, 15);
+  rim.position.set(0, -1, -4);
+  rim.castShadow = true;
   scene.add(rim);
 
-  /* Rotating platform */
-  const platformGeo = new THREE.CylinderGeometry(2.2, 2.2, 0.08, 64);
+  /* Realistic reflective floor */
+  const floorGeo = new THREE.CylinderGeometry(3, 3, 0.15, 64);
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: 0x1a1830,
+    metalness: 0.85,
+    roughness: 0.15,
+    envMapIntensity: 1.5
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.receiveShadow = true;
+  floor.castShadow = true;
+  floor.position.y = -0.5;
+  scene.add(floor);
+
+  /* Rotating platform top */
+  const platformGeo = new THREE.CylinderGeometry(2.3, 2.3, 0.08, 64);
   const platformMat = new THREE.MeshStandardMaterial({
-    color: 0x110d22,
-    metalness: .9,
-    roughness: .3,
-    envMapIntensity: 1
+    color: 0x0d0a1a,
+    metalness: 0.95,
+    roughness: 0.2,
+    envMapIntensity: 1.2
   });
   const platform = new THREE.Mesh(platformGeo, platformMat);
   platform.receiveShadow = true;
+  platform.castShadow = true;
   platform.position.y = -0.04;
   scene.add(platform);
 
-  /* Edge ring glow */
-  const ringGeo = new THREE.TorusGeometry(2.2, 0.02, 8, 80);
+  /* Enhanced edge ring glow */
+  const ringGeo = new THREE.TorusGeometry(2.3, 0.03, 8, 100);
   const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ffe1 });
   const ring = new THREE.Mesh(ringGeo, ringMat);
   ring.rotation.x = Math.PI / 2;
+  ring.position.z = 0.05;
   scene.add(ring);
 
   /* Radial lines on platform */
-  for (let i = 0; i < 12; i++) {
-    const angle = (i / 12) * Math.PI * 2;
+  for (let i = 0; i < 16; i++) {
+    const angle = (i / 16) * Math.PI * 2;
     const pts = [
       new THREE.Vector3(0, 0.05, 0),
-      new THREE.Vector3(Math.cos(angle) * 2.1, 0.05, Math.sin(angle) * 2.1)
+      new THREE.Vector3(Math.cos(angle) * 2.2, 0.05, Math.sin(angle) * 2.2)
     ];
     const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xe8003a, transparent: true, opacity: .3 });
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xe8003a, transparent: true, opacity: .4 });
     scene.add(new THREE.Line(lineGeo, lineMat));
   }
 
@@ -498,33 +520,37 @@
   const loader = new GLTFLoader();
   let model;
   loader.load(
-    'assets/miles_y_gwen.glb',
+    'https://raw.githubusercontent.com/adiisharma940-lab/spider/main/assets/miles_y_gwen.glb',
     (gltf) => {
       model = gltf.scene;
-      // Centre & scale
+      model.traverse(c => { 
+        if (c.isMesh) { 
+          c.castShadow = true;
+          c.receiveShadow = true;
+        } 
+      });
+      
       const box = new THREE.Box3().setFromObject(model);
       const size = box.getSize(new THREE.Vector3());
       const centre = box.getCenter(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = 3 / maxDim;
+      const scale = 3.5 / maxDim;
       model.scale.setScalar(scale);
       model.position.sub(centre.multiplyScalar(scale));
-      model.position.y += .05;
-      model.castShadow = true;
-      model.traverse(c => { if (c.isMesh) c.castShadow = true; });
+      model.position.y += .2;
       scene.add(model);
     },
     undefined,
-    (err) => console.warn('GLB load error:', err)
+    (err) => console.error('GLB load error:', err)
   );
 
-  /* Particle field */
-  const pCount = 300;
+  /* Particle field - enhanced */
+  const pCount = 400;
   const pGeo = new THREE.BufferGeometry();
   const pPos = new Float32Array(pCount * 3);
-  for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - .5) * 30;
+  for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - .5) * 35;
   pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  const pMat = new THREE.PointsMaterial({ color: 0xff6eb4, size: .04, transparent: true, opacity: .5 });
+  const pMat = new THREE.PointsMaterial({ color: 0xff6eb4, size: .05, transparent: true, opacity: .6 });
   scene.add(new THREE.Points(pGeo, pMat));
 
   /* Resize */
@@ -540,9 +566,9 @@
   (function animate() {
     requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
-    platform.rotation.y = t * .4;
-    ring.rotation.z = t * .2;
-    rim.intensity = 3 + Math.sin(t * 2) * 1.5;
+    if (platform) platform.rotation.y = t * .3;
+    if (ring) ring.rotation.z = t * .15;
+    rim.intensity = 4 + Math.sin(t * 2) * 2;
     controls.update();
     renderer.render(scene, cam);
   })();
@@ -561,10 +587,16 @@
   /* Audio toggle */
   const audio = document.getElementById('bg-audio');
   const btn   = document.getElementById('audio-btn');
-  audio.volume = 0.4;
+  audio.volume = 0.3;
   btn.addEventListener('click', () => {
-    if (audio.paused) { audio.play(); btn.textContent = '♪ Pause Music'; }
-    else { audio.pause(); btn.textContent = '♪ Play Music'; }
+    if (audio.paused) { 
+      audio.play().catch(e => console.log('Audio play failed:', e)); 
+      btn.textContent = '♪ Pause Music'; 
+    }
+    else { 
+      audio.pause(); 
+      btn.textContent = '♪ Play Music'; 
+    }
   });
 </script>
 
