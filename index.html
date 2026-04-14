@@ -6,489 +6,449 @@
 <title>Spider-Verse</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --red:#E8192C;
-    --ink:#0a0a0f;
-    --cream:#f5f0e8;
-    --gold:#f0c040;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--red:#E8192C;--ink:#07070d;--cream:#f5f0e8;--gold:#f0c040}
 
-  /* ── PRELOADER ── */
-  #preloader{
-    position:fixed;inset:0;z-index:9999;
-    background:var(--ink);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    transition:opacity .7s ease, visibility .7s ease;
-  }
-  #preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .pre-spider{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(3rem,10vw,8rem);
-    color:var(--cream);
-    letter-spacing:.08em;
-    line-height:1;
-    text-align:center;
-  }
-  .pre-spider span{color:var(--red)}
-  .pre-bar{
-    width:220px;height:3px;
-    background:rgba(255,255,255,.12);
-    border-radius:2px;margin-top:2rem;
-    overflow:hidden;
-  }
-  .pre-bar-fill{
-    height:100%;width:0%;
-    background:linear-gradient(90deg,var(--red),var(--gold));
-    border-radius:2px;
-    transition:width .08s linear;
-  }
-  .pre-label{
-    margin-top:.75rem;
-    font-family:'DM Sans',sans-serif;
-    font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;
-    color:rgba(255,255,255,.4);
-  }
+/* ── PRELOADER ── */
+#preloader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .8s ease,visibility .8s ease;
+}
+#preloader.out{opacity:0;visibility:hidden;pointer-events:none}
 
-  /* ── BG VIDEO ── */
-  #bg-video{
-    position:fixed;inset:0;width:100%;height:100%;
-    object-fit:cover;z-index:-2;
-    filter:brightness(.35) saturate(1.4);
-  }
-  #bg-overlay{
-    position:fixed;inset:0;z-index:-1;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,25,44,.18) 0%,transparent 70%),
-      linear-gradient(to bottom,rgba(10,10,15,.5) 0%,rgba(10,10,15,.2) 40%,rgba(10,10,15,.7) 100%);
-  }
+.pre-web{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.pre-web svg{width:100%;height:100%;opacity:.07}
 
-  /* ── HERO ── */
-  #hero{
-    height:100vh;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;padding:2rem;
-    position:relative;
-  }
-  .hero-eyebrow{
-    font-family:'DM Sans',sans-serif;
-    font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;
-    color:var(--gold);opacity:.9;margin-bottom:1.4rem;
-  }
-  .hero-title{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(4.5rem,15vw,13rem);
-    line-height:.9;color:var(--cream);
-    text-shadow:0 0 80px rgba(232,25,44,.35);
-  }
-  .hero-title em{color:var(--red);font-style:normal}
-  .hero-sub{
-    margin-top:1.5rem;
-    font-family:'DM Sans',sans-serif;
-    font-size:clamp(.85rem,1.8vw,1.1rem);
-    color:rgba(245,240,232,.55);
-    max-width:480px;line-height:1.7;
-    font-style:italic;
-  }
-  .scroll-hint{
-    position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:6px;
-    font-family:'DM Sans',sans-serif;
-    font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;
-    color:rgba(255,255,255,.3);
-    animation:fadeFloat 2.5s ease-in-out infinite;
-  }
-  .scroll-hint svg{opacity:.5}
-  @keyframes fadeFloat{0%,100%{transform:translateX(-50%) translateY(0);opacity:.4}50%{transform:translateX(-50%) translateY(8px);opacity:.9}}
+.pre-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,12vw,9rem);
+  line-height:.88;text-align:center;
+  color:var(--cream);letter-spacing:.04em;
+  position:relative;
+  animation:logoPulse 1.8s ease-in-out infinite alternate;
+}
+.pre-logo span{
+  display:block;color:var(--red);
+  font-size:clamp(5rem,18vw,14rem);
+  text-shadow:0 0 60px rgba(232,25,44,.5),0 0 120px rgba(232,25,44,.2);
+}
+@keyframes logoPulse{
+  from{text-shadow:0 0 40px rgba(232,25,44,.2)}
+  to{text-shadow:0 0 80px rgba(232,25,44,.6),0 0 160px rgba(232,25,44,.2)}
+}
 
-  /* ── CARDS SECTION ── */
-  #cards{padding:6rem 0 10rem;}
+.pre-dots{display:flex;gap:10px;margin-top:2.8rem}
+.pre-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--red);opacity:.2;
+  animation:dotBlink 1.2s ease-in-out infinite;
+}
+.pre-dot:nth-child(2){animation-delay:.2s}
+.pre-dot:nth-child(3){animation-delay:.4s}
+.pre-dot:nth-child(4){animation-delay:.6s}
+.pre-dot:nth-child(5){animation-delay:.8s}
+@keyframes dotBlink{
+  0%,100%{opacity:.15;transform:scale(.8)}
+  50%{opacity:1;transform:scale(1.3)}
+}
 
-  .section-label{
-    font-family:'DM Sans',sans-serif;
-    font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
-    color:rgba(245,240,232,.35);
-    text-align:center;margin-bottom:5rem;
-  }
+.pre-status{
+  margin-top:1.4rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(245,240,232,.3);
+  min-height:1.2em;
+}
 
-  .card-wrap{
-    max-width:1100px;margin:0 auto;
-    padding:0 2rem;
-    display:flex;flex-direction:column;gap:7rem;
-  }
+/* ── BG VIDEO ── */
+#bg-video{
+  position:fixed;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:-2;
+  filter:brightness(.28) saturate(1.6);
+}
+#veil{
+  position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%,rgba(232,25,44,.2) 0%,transparent 65%),
+    linear-gradient(180deg,rgba(7,7,13,.55) 0%,rgba(7,7,13,.1) 45%,rgba(7,7,13,.75) 100%);
+}
 
-  .card{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0;
-    min-height:520px;
-    border-radius:4px;
-    overflow:hidden;
-    opacity:0;
-    transform:translateY(60px);
-    transition:opacity .8s ease,transform .8s ease;
-    position:relative;
-  }
-  .card.visible{opacity:1;transform:translateY(0)}
-  .card:nth-child(even){direction:rtl}
-  .card:nth-child(even) *{direction:ltr}
+/* ── HERO ── */
+#hero{
+  height:100vh;min-height:600px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2rem;position:relative;
+}
+.hero-eye{
+  font-family:'DM Sans',sans-serif;
+  font-size:.68rem;letter-spacing:.38em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.6rem;
+}
+.hero-h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,16vw,13rem);
+  line-height:.88;color:var(--cream);
+  text-shadow:0 0 100px rgba(232,25,44,.3);
+}
+.hero-h1 em{color:var(--red);font-style:normal}
+.hero-p{
+  margin-top:1.6rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(.85rem,1.6vw,1rem);
+  color:rgba(245,240,232,.5);
+  max-width:460px;line-height:1.8;font-style:italic;
+}
+.arrow{
+  position:absolute;bottom:2.4rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+  animation:bob 2.4s ease-in-out infinite;
+}
+@keyframes bob{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  55%{transform:translateX(-50%) translateY(9px)}
+}
 
-  .card-img-wrap{
-    position:relative;overflow:hidden;
-    min-height:400px;
-  }
-  .card-img-wrap img{
-    width:100%;height:100%;
-    object-fit:cover;
-    display:block;
-    transition:transform .7s cubic-bezier(.25,.46,.45,.94),filter .7s ease;
-    filter:saturate(1.1);
-  }
-  .card:hover .card-img-wrap img{
-    transform:scale(1.06);
-    filter:saturate(1.4) brightness(1.05);
-  }
-  .img-gloss{
-    position:absolute;inset:0;
-    background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);
-    pointer-events:none;
-  }
-  .card-num-badge{
-    position:absolute;top:1.2rem;left:1.2rem;
-    font-family:'Bebas Neue',sans-serif;
-    font-size:1rem;letter-spacing:.12em;
-    color:rgba(255,255,255,.6);
-    background:rgba(0,0,0,.45);
-    backdrop-filter:blur(6px);
-    padding:.3rem .7rem;border-radius:2px;
-    border:1px solid rgba(255,255,255,.1);
-  }
+/* ── CARDS ── */
+#cards{padding:5rem 0 10rem}
+.sec-lbl{
+  font-family:'DM Sans',sans-serif;
+  font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(245,240,232,.28);text-align:center;margin-bottom:5rem;
+}
+.deck{
+  max-width:1080px;margin:0 auto;padding:0 1.5rem;
+  display:flex;flex-direction:column;gap:6rem;
+}
+.card{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:500px;border-radius:6px;overflow:hidden;
+  opacity:0;transform:translateY(70px) scale(.98);
+  transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 24px 80px rgba(0,0,0,.55);
+}
+.card.show{opacity:1;transform:none}
+.card:nth-child(even){direction:rtl}
+.card:nth-child(even) *{direction:ltr}
 
-  .card-body{
-    background:rgba(10,10,15,.82);
-    backdrop-filter:blur(14px);
-    padding:3.5rem 3rem;
-    display:flex;flex-direction:column;
-    justify-content:center;
-    border:1px solid rgba(255,255,255,.05);
-    border-left:none;
-    position:relative;
-    overflow:hidden;
-  }
-  .card:nth-child(even) .card-body{
-    border-left:1px solid rgba(255,255,255,.05);
-    border-right:none;
-  }
-  .card-body::before{
-    content:'';
-    position:absolute;top:0;left:0;right:0;height:1px;
-    background:linear-gradient(90deg,transparent,var(--red),transparent);
-    opacity:0;
-    transition:opacity .5s ease;
-  }
-  .card:hover .card-body::before{opacity:.7}
-  .card-body::after{
-    content:'';
-    position:absolute;inset:0;
-    background:radial-gradient(ellipse 60% 60% at 80% 50%,rgba(232,25,44,.06),transparent);
-    opacity:0;transition:opacity .5s ease;
-    pointer-events:none;
-  }
-  .card:hover .card-body::after{opacity:1}
+.img-side{position:relative;overflow:hidden;min-height:380px}
+.img-side img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .75s cubic-bezier(.25,.46,.45,.94),filter .75s ease;
+  filter:saturate(1.05) brightness(.95);
+}
+.card:hover .img-side img{transform:scale(1.07);filter:saturate(1.5) brightness(1.05)}
+.img-side::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,transparent 55%);
+  pointer-events:none;
+}
+.badge{
+  position:absolute;top:1.1rem;left:1.1rem;
+  font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.14em;
+  color:rgba(255,255,255,.65);
+  background:rgba(0,0,0,.5);backdrop-filter:blur(8px);
+  padding:.28rem .65rem;border-radius:3px;
+  border:1px solid rgba(255,255,255,.08);
+}
 
-  .card-tag{
-    font-family:'DM Sans',sans-serif;
-    font-size:.63rem;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--red);margin-bottom:.9rem;
-    opacity:.9;
-  }
-  .card-title{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(2rem,4.5vw,3.2rem);
-    color:var(--cream);line-height:1;
-    margin-bottom:1.4rem;
-    transition:color .3s ease;
-  }
-  .card:hover .card-title{color:#fff}
-  .card-desc{
-    font-family:'DM Sans',sans-serif;
-    font-size:clamp(.85rem,1.3vw,.97rem);
-    color:rgba(245,240,232,.52);
-    line-height:1.8;
-    font-weight:300;
-    transition:color .3s ease;
-  }
-  .card:hover .card-desc{color:rgba(245,240,232,.75)}
-  .card-line{
-    width:36px;height:2px;
-    background:var(--red);
-    margin-top:2rem;
-    transition:width .4s ease;
-  }
-  .card:hover .card-line{width:72px}
+.txt-side{
+  background:rgba(7,7,13,.84);
+  backdrop-filter:blur(18px);
+  padding:3.2rem 2.8rem;
+  display:flex;flex-direction:column;justify-content:center;
+  border:1px solid rgba(255,255,255,.05);
+  border-left:none;
+  position:relative;overflow:hidden;
+}
+.card:nth-child(even) .txt-side{border-left:1px solid rgba(255,255,255,.05);border-right:none}
+.txt-side::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red) 50%,transparent);
+  opacity:0;transition:opacity .45s ease;
+}
+.txt-side::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 85% 50%,rgba(232,25,44,.07),transparent);
+  opacity:0;transition:opacity .45s ease;
+}
+.card:hover .txt-side::before,.card:hover .txt-side::after{opacity:1}
 
-  /* ── AUDIO BTN ── */
-  #audio-btn{
-    position:fixed;bottom:2rem;right:2rem;z-index:500;
-    width:44px;height:44px;border-radius:50%;
-    background:rgba(10,10,15,.75);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.12);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;transition:background .3s,border-color .3s,transform .2s;
-    color:rgba(255,255,255,.7);
-  }
-  #audio-btn:hover{background:rgba(232,25,44,.3);border-color:var(--red);transform:scale(1.1)}
-  #audio-btn svg{width:18px;height:18px;fill:currentColor}
+.c-tag{
+  font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--red);margin-bottom:.85rem;
+}
+.c-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,4vw,3rem);
+  color:var(--cream);line-height:1;margin-bottom:1.3rem;
+  transition:color .3s;
+}
+.card:hover .c-title{color:#fff}
+.c-desc{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(.82rem,1.2vw,.95rem);
+  color:rgba(245,240,232,.48);
+  line-height:1.85;font-weight:300;
+  transition:color .35s;
+}
+.card:hover .c-desc{color:rgba(245,240,232,.78)}
+.c-bar{
+  width:32px;height:2px;background:var(--red);
+  margin-top:1.8rem;transition:width .4s ease;
+}
+.card:hover .c-bar{width:68px}
 
-  /* ── FOOTER ── */
-  footer{
-    text-align:center;
-    padding:3rem 2rem 4rem;
-    font-family:'DM Sans',sans-serif;
-    font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
-    color:rgba(255,255,255,.18);
-  }
+/* ── AUDIO BTN ── */
+#aud-btn{
+  position:fixed;bottom:1.8rem;right:1.8rem;z-index:800;
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(7,7,13,.8);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .25s,border-color .25s,transform .2s;
+  color:rgba(255,255,255,.65);
+}
+#aud-btn:hover{background:rgba(232,25,44,.35);border-color:var(--red);transform:scale(1.12)}
+#aud-btn svg{width:20px;height:20px;fill:currentColor;flex-shrink:0}
 
-  /* ── RESPONSIVE ── */
-  @media(max-width:720px){
-    .card{grid-template-columns:1fr;min-height:auto}
-    .card:nth-child(even){direction:ltr}
-    .card-img-wrap{min-height:260px}
-    .card-body{padding:2.2rem 1.8rem;border-left:1px solid rgba(255,255,255,.05)!important;border-right:none!important;border-top:none}
+footer{
+  text-align:center;padding:2.5rem 2rem 3.5rem;
+  font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.15);
+}
+
+@media(max-width:700px){
+  .card{grid-template-columns:1fr;direction:ltr!important;min-height:auto}
+  .card:nth-child(even){direction:ltr}
+  .img-side{min-height:250px}
+  .txt-side{
+    padding:2rem 1.6rem;
+    border-left:1px solid rgba(255,255,255,.05)!important;
+    border-right:none!important;border-top:none;
   }
+}
 </style>
 </head>
 <body>
 
 <!-- PRELOADER -->
 <div id="preloader">
-  <div class="pre-spider">SPIDER<span>VERSE</span></div>
-  <div class="pre-bar"><div class="pre-bar-fill" id="bar-fill"></div></div>
-  <div class="pre-label" id="pre-label">Loading assets…</div>
+  <div class="pre-web">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#E8192C" stroke-width="1" fill="none">
+        <line x1="600" y1="400" x2="600" y2="0"/>
+        <line x1="600" y1="400" x2="1200" y2="0"/>
+        <line x1="600" y1="400" x2="1200" y2="400"/>
+        <line x1="600" y1="400" x2="1200" y2="800"/>
+        <line x1="600" y1="400" x2="600" y2="800"/>
+        <line x1="600" y1="400" x2="0" y2="800"/>
+        <line x1="600" y1="400" x2="0" y2="400"/>
+        <line x1="600" y1="400" x2="0" y2="0"/>
+        <ellipse cx="600" cy="400" rx="120" ry="80"/>
+        <ellipse cx="600" cy="400" rx="240" ry="160"/>
+        <ellipse cx="600" cy="400" rx="380" ry="250"/>
+        <ellipse cx="600" cy="400" rx="540" ry="360"/>
+        <ellipse cx="600" cy="400" rx="720" ry="480"/>
+      </g>
+    </svg>
+  </div>
+  <div class="pre-logo">SPIDER<span>MAN</span></div>
+  <div class="pre-dots">
+    <div class="pre-dot"></div>
+    <div class="pre-dot"></div>
+    <div class="pre-dot"></div>
+    <div class="pre-dot"></div>
+    <div class="pre-dot"></div>
+  </div>
+  <div class="pre-status" id="pre-status">Entering the verse…</div>
 </div>
 
-<!-- BACKGROUND VIDEO (fallback: animated gradient) -->
-<video id="bg-video" autoplay muted loop playsinline
-  poster="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx.jpg">
-  <source src="" type="videoplayback.mp4"/>
+<!-- VIDEO BACKGROUND -->
+<video id="bg-video" autoplay muted loop playsinline preload="auto">
+  <source src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/videoplayback.mp4" type="video/mp4"/>
 </video>
-<div id="bg-overlay"></div>
+<div id="veil"></div>
 
 <!-- AUDIO -->
-<audio id="bg-audio" loop>
-  <source src="wow.mp3" type="audio/mpeg"/>
+<audio id="bg-audio" loop preload="auto">
+  <source src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/wow.mp3" type="audio/mpeg"/>
 </audio>
 
-<!-- AUDIO BTN -->
-<button id="audio-btn" title="Toggle music" aria-label="Toggle music">
-  <svg id="ico-play" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zm2.5 0c0 2.77-1.22 5.27-3.14 7l1.42 1.42C19.62 18.27 21 15.3 21 12s-1.38-6.27-3.72-8.42L15.86 5c1.92 1.73 3.14 4.23 3.14 7z"/></svg>
-  <svg id="ico-mute" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.28 19l2 2L20.73 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+<!-- AUDIO TOGGLE -->
+<button id="aud-btn" title="Toggle music" aria-label="Toggle music">
+  <svg id="i-sound" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zm2.5 0c0 2.77-1.22 5.27-3.14 7l1.42 1.42C19.62 18.27 21 15.3 21 12s-1.38-6.27-3.72-8.42L15.86 5c1.92 1.73 3.14 4.23 3.14 7z"/></svg>
+  <svg id="i-mute" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.28 19l2 2L20.73 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
 </button>
 
 <!-- HERO -->
 <section id="hero">
-  <p class="hero-eyebrow">Sony Pictures Animation · 2018 – 2023</p>
-  <h1 class="hero-title">Into<br/>the <em>Spider</em><br/>Verse</h1>
-  <p class="hero-sub">Across dimensions, against all canon — a story about anyone can wear the mask.</p>
-  <div class="scroll-hint">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M7 10l5 5 5-5z"/></svg>
+  <p class="hero-eye">Sony Pictures Animation · Into the Spider-Verse</p>
+  <h1 class="hero-h1">Into<br/>the <em>Spider</em><br/>Verse</h1>
+  <p class="hero-p">Across dimensions, against all canon — a story that anyone can wear the mask.</p>
+  <div class="arrow">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.5)"><path d="M7 10l5 5 5-5z"/></svg>
     Scroll
   </div>
 </section>
 
 <!-- CARDS -->
 <section id="cards">
-  <p class="section-label">The Verse · Seven Chapters</p>
-  <div class="card-wrap" id="card-wrap">
+  <p class="sec-lbl">The Verse · Seven Chapters</p>
+  <div class="deck">
 
     <div class="card">
-      <div class="card-img-wrap">
+      <div class="img-side">
         <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx.jpg" alt="Miles Morales" loading="eager"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">01</span>
+        <span class="badge">01</span>
       </div>
-      <div class="card-body">
-        <p class="card-tag">Origin</p>
-        <h2 class="card-title">Into the Verse</h2>
-        <p class="card-desc">Miles Morales never asked to be Spider-Man. A radioactive spider from another dimension made that choice for him. Now Brooklyn's newest hero swings above the bridge that connects boroughs — and worlds.</p>
-        <div class="card-line"></div>
+      <div class="txt-side">
+        <p class="c-tag">Origin</p>
+        <h2 class="c-title">Into the Verse</h2>
+        <p class="c-desc">Miles Morales never asked to be Spider-Man. A radioactive spider from another dimension made that choice for him. Now Brooklyn's newest hero swings above the bridge that connects boroughs — and worlds.</p>
+        <div class="c-bar"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-img-wrap">
+      <div class="img-side">
         <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(1).jpg" alt="Spider-People" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">02</span>
+        <span class="badge">02</span>
       </div>
-      <div class="card-body">
-        <p class="card-tag">Alliance</p>
-        <h2 class="card-title">Spider-People Unite</h2>
-        <p class="card-desc">When the multiverse cracks open, Miles teams up with Gwen Stacy and Peter B. Parker. Different dimensions, different styles — but the same unstoppable spider-sense.</p>
-        <div class="card-line"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img-wrap">
-        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(2).jpg" alt="Sunflower moment" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">03</span>
-      </div>
-      <div class="card-body">
-        <p class="card-tag">Connection</p>
-        <h2 class="card-title">A Sunflower for You</h2>
-        <p class="card-desc">In between battles and dimension-hops, a quiet moment: a sunflower. Miles and Gwen share something no canon event can erase — a connection that defies every universe's rules.</p>
-        <div class="card-line"></div>
+      <div class="txt-side">
+        <p class="c-tag">Alliance</p>
+        <h2 class="c-title">Spider-People Unite</h2>
+        <p class="c-desc">When the multiverse cracks open, Miles teams up with Gwen Stacy and Peter B. Parker. Different dimensions, different styles — but the same unstoppable spider-sense.</p>
+        <div class="c-bar"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-img-wrap">
+      <div class="img-side">
+        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(2).jpg" alt="Sunflower" loading="lazy"/>
+        <span class="badge">03</span>
+      </div>
+      <div class="txt-side">
+        <p class="c-tag">Connection</p>
+        <h2 class="c-title">A Sunflower for You</h2>
+        <p class="c-desc">In between battles and dimension-hops, a quiet moment: a sunflower. Miles and Gwen share something no canon event can erase — a connection that defies every universe's rules.</p>
+        <div class="c-bar"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-side">
         <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(3).jpg" alt="Ghost-Spider" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">04</span>
+        <span class="badge">04</span>
       </div>
-      <div class="card-body">
-        <p class="card-tag">Power</p>
-        <h2 class="card-title">Ghost-Spider</h2>
-        <p class="card-desc">Gwen Stacy of Earth-65 is Ghost-Spider: precise, fearless, and draped in the most iconic suit in any verse. She swings through watercolour skies like the city itself is her canvas.</p>
-        <div class="card-line"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img-wrap">
-        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(4).jpg" alt="Miles and Gwen together" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">05</span>
-      </div>
-      <div class="card-body">
-        <p class="card-tag">Together</p>
-        <h2 class="card-title">Web of Trust</h2>
-        <p class="card-desc">Side by side, they're unstoppable. Miles's Venom blast and Gwen's razor-sharp agility complement each other perfectly — a duo written in the stars of every Spider-Verse timeline.</p>
-        <div class="card-line"></div>
+      <div class="txt-side">
+        <p class="c-tag">Power</p>
+        <h2 class="c-title">Ghost-Spider</h2>
+        <p class="c-desc">Gwen Stacy of Earth-65 is Ghost-Spider: precise, fearless, and draped in the most iconic suit in any verse. She swings through watercolour skies like the city itself is her canvas.</p>
+        <div class="c-bar"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-img-wrap">
-        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(5).jpg" alt="Rooftop at dusk" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">06</span>
+      <div class="img-side">
+        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(4).jpg" alt="Together" loading="lazy"/>
+        <span class="badge">05</span>
       </div>
-      <div class="card-body">
-        <p class="card-tag">Horizon</p>
-        <h2 class="card-title">Rooftop at Dusk</h2>
-        <p class="card-desc">Above the city's chaos, two Spider-People sit quietly. No masks needed in this moment — just two teenagers watching the sun dissolve into a skyline they've sworn to protect.</p>
-        <div class="card-line"></div>
+      <div class="txt-side">
+        <p class="c-tag">Together</p>
+        <h2 class="c-title">Web of Trust</h2>
+        <p class="c-desc">Side by side, they're unstoppable. Miles's Venom blast and Gwen's razor-sharp agility complement each other perfectly — a duo written in the stars of every Spider-Verse timeline.</p>
+        <div class="c-bar"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-img-wrap">
-        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(6).jpg" alt="Back to back" loading="lazy"/>
-        <div class="img-gloss"></div>
-        <span class="card-num-badge">07</span>
+      <div class="img-side">
+        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(5).jpg" alt="Rooftop" loading="lazy"/>
+        <span class="badge">06</span>
       </div>
-      <div class="card-body">
-        <p class="card-tag">Rest</p>
-        <h2 class="card-title">Back to Back</h2>
-        <p class="card-desc">Even heroes need to breathe. Back to back, exhausted but alive, Miles and Gwen remind us that the bravest thing isn't always the swing — sometimes it's simply staying.</p>
-        <div class="card-line"></div>
+      <div class="txt-side">
+        <p class="c-tag">Horizon</p>
+        <h2 class="c-title">Rooftop at Dusk</h2>
+        <p class="c-desc">Above the city's chaos, two Spider-People sit quietly. No masks needed in this moment — just two teenagers watching the sun dissolve into a skyline they've sworn to protect.</p>
+        <div class="c-bar"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-side">
+        <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(6).jpg" alt="Back to Back" loading="lazy"/>
+        <span class="badge">07</span>
+      </div>
+      <div class="txt-side">
+        <p class="c-tag">Rest</p>
+        <h2 class="c-title">Back to Back</h2>
+        <p class="c-desc">Even heroes need to breathe. Back to back, exhausted but alive, Miles and Gwen remind us that the bravest thing isn't always the swing — sometimes it's simply staying.</p>
+        <div class="c-bar"></div>
       </div>
     </div>
 
   </div>
 </section>
 
-<footer>© Spider-Verse Fan Tribute &nbsp;·&nbsp; All characters © Sony Pictures &amp; Marvel</footer>
+<footer>Spider-Verse Fan Tribute &nbsp;·&nbsp; All characters © Sony Pictures & Marvel</footer>
 
 <script>
 (function(){
+  const BASE = 'https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/';
+  const SRCS = [
+    'peakpx.jpg','peakpx%20(1).jpg','peakpx%20(2).jpg','peakpx%20(3).jpg',
+    'peakpx%20(4).jpg','peakpx%20(5).jpg','peakpx%20(6).jpg'
+  ];
 
-  /* ── PRELOADER ── */
   const loader = document.getElementById('preloader');
-  const fill   = document.getElementById('bar-fill');
-  const label  = document.getElementById('pre-label');
+  const status = document.getElementById('pre-status');
+  const audio  = document.getElementById('bg-audio');
+  const btn    = document.getElementById('aud-btn');
+  const iSnd   = document.getElementById('i-sound');
+  const iMut   = document.getElementById('i-mute');
+  let playing  = false;
+  let done     = 0;
+  const total  = SRCS.length;
+  const msgs   = ['Entering the verse…','Warming up web-shooters…','Almost ready…','Suit up.'];
 
-  const images = Array.from(document.querySelectorAll('img'));
-  let loaded = 0;
-  const total = images.length;
-
-  const labels = ['Loading artwork…','Entering the verse…','Almost there…','Suit up.'];
-  let li = 0;
-
-  function tick(n){
-    const pct = Math.round((n/total)*100);
-    fill.style.width = pct + '%';
-    if(pct > 25 && li < 1){label.textContent = labels[1]; li=1}
-    if(pct > 60 && li < 2){label.textContent = labels[2]; li=2}
-    if(pct >= 100 && li < 3){label.textContent = labels[3]; li=3}
+  function tick(){
+    done++;
+    const pct = done / total;
+    if(pct > .35) status.textContent = msgs[1];
+    if(pct > .7)  status.textContent = msgs[2];
+    if(done >= total){ status.textContent = msgs[3]; setTimeout(reveal, 500); }
   }
 
-  function checkDone(){
-    loaded++;
-    tick(loaded);
-    if(loaded >= total) reveal();
-  }
+  SRCS.forEach(s=>{ const i=new Image(); i.onload=i.onerror=tick; i.src=BASE+s; });
 
   function reveal(){
-    setTimeout(()=>{
-      loader.classList.add('hidden');
-      tryAudio();
-    }, 700);
+    loader.classList.add('out');
+    audio.volume = 0.5;
+    const p = audio.play();
+    if(p) p.then(()=>{ playing=true; sync(); }).catch(()=>{ playing=false; sync(); });
   }
 
-  if(total === 0){ reveal(); }
-  else {
-    images.forEach(img=>{
-      if(img.complete){ checkDone(); }
-      else { img.addEventListener('load', checkDone); img.addEventListener('error', checkDone); }
-    });
-  }
-
-  /* ── AUDIO ── */
-  const audio = document.getElementById('bg-audio');
-  const btn   = document.getElementById('audio-btn');
-  const iPlay = document.getElementById('ico-play');
-  const iMute = document.getElementById('ico-mute');
-  let playing = false;
-
-  function setIcons(){
-    iPlay.style.display = playing ? 'none' : '';
-    iMute.style.display = playing ? '' : 'none';
-  }
-
-  function tryAudio(){
-    audio.volume = 0.45;
-    audio.play().then(()=>{ playing=true; setIcons(); }).catch(()=>{ playing=false; setIcons(); });
+  function sync(){
+    iSnd.style.display = playing ? 'none' : '';
+    iMut.style.display = playing ? '' : 'none';
   }
 
   btn.addEventListener('click',()=>{
     if(playing){ audio.pause(); playing=false; }
-    else { audio.play().then(()=>{ playing=true; }); }
-    setIcons();
+    else { audio.play().catch(()=>{}); playing=true; }
+    sync();
   });
 
-  /* ── SCROLL REVEAL ── */
-  const cards = document.querySelectorAll('.card');
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
-    });
-  },{threshold:0.15});
-  cards.forEach(c=>obs.observe(c));
-
-  /* ── VIDEO FALLBACK: animated CSS bg if no src ── */
-  const vid = document.getElementById('bg-video');
-  const src = vid.querySelector('source').src;
-  if(!src || src.endsWith('/')){
-    vid.style.display='none';
-    document.getElementById('bg-overlay').style.background=
-      'radial-gradient(ellipse 100% 80% at 50% 0%,#1a0508 0%,#0a0a0f 60%)';
-  }
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.card').forEach(c=>obs.observe(c));
 
 })();
 </script>
