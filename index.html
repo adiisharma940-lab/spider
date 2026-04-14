@@ -1,102 +1,1239 @@
-<!-- Card 1 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx.jpg" alt="Miles Morales swinging over Brooklyn Bridge" loading="lazy"/>
-    </div>
-    <div class="card-body">
-      <span class="card-num">01</span>
-      <p class="card-tag">Origin</p>
-      <h2 class="card-title">Into the Verse</h2>
-      <p class="card-desc">Miles Morales never asked to be Spider-Man. A radioactive spider from another dimension made that choice for him. Now Brooklyn's newest hero swings above the bridge that connects boroughs — and worlds.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miles & Gwen — Spider-Verse</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --miles-red: #e63946;
+    --miles-blue: #1d3557;
+    --gwen-pink: #ff006e;
+    --gwen-white: #f0f0f0;
+    --gwen-cyan: #00f5ff;
+    --accent-gold: #ffd60a;
+    --bg-dark: #050508;
+    --bg-card: #0a0a14;
+    --font-display: 'Bangers', cursive;
+    --font-hero: 'Bebas Neue', cursive;
+    --font-body: 'Rajdhani', sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    background: var(--bg-dark);
+    color: #fff;
+    font-family: var(--font-body);
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 20px; height: 20px;
+    border: 2px solid var(--gwen-pink);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease, border-color 0.3s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-dot {
+    position: fixed;
+    width: 6px; height: 6px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s ease;
+  }
+  .cursor.hover { transform: translate(-50%, -50%) scale(2.5); border-color: var(--accent-gold); }
+
+  /* LOADER */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--bg-dark);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+
+  .loader-web {
+    width: 120px; height: 120px;
+    position: relative;
+    margin-bottom: 30px;
+  }
+  .loader-web svg {
+    animation: webSpin 2s linear infinite;
+    filter: drop-shadow(0 0 15px var(--gwen-pink));
+  }
+  @keyframes webSpin { to { transform: rotate(360deg); } }
+
+  .loader-text {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 8px;
+    background: linear-gradient(90deg, var(--miles-red), var(--gwen-pink), var(--gwen-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .loader-bar-wrap {
+    width: 200px; height: 2px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 20px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .loader-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--miles-red), var(--gwen-pink));
+    width: 0%;
+    animation: loadBar 2.5s ease forwards;
+  }
+  @keyframes loadBar { to { width: 100%; } }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(5,5,8,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--miles-red), var(--gwen-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gwen-pink);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { width: 100%; }
+
+  .sound-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6); padding: 8px 16px;
+    border-radius: 20px; cursor: none;
+    font-family: var(--font-body); font-size: 0.8rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+  .sound-btn:hover { border-color: var(--gwen-cyan); color: var(--gwen-cyan); }
+  .sound-btn.playing { border-color: var(--gwen-pink); color: var(--gwen-pink); }
+
+  /* HERO */
+  #hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(230,57,70,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(0,245,255,0.1) 0%, transparent 60%),
+                var(--bg-dark);
+  }
+
+  /* PARALLAX LAYERS */
+  .parallax-scene {
+    position: absolute; inset: 0;
+    perspective: 800px;
+  }
+  .parallax-layer {
+    position: absolute; inset: -50px;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+  }
+  .layer-1 { z-index: 1; }
+  .layer-2 { z-index: 2; }
+  .layer-3 { z-index: 3; }
+
+  .bg-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+    filter: blur(2px);
+  }
+
+  /* DOT HALFTONE */
+  .halftone {
+    position: absolute; inset: 0; z-index: 1;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+
+  /* GLITCH LINES */
+  .glitch-lines {
+    position: absolute; inset: 0; z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .glitch-lines::before, .glitch-lines::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gwen-pink), transparent);
+    animation: glitchLine 4s ease-in-out infinite;
+    opacity: 0.4;
+  }
+  .glitch-lines::after {
+    background: linear-gradient(90deg, transparent, var(--gwen-cyan), transparent);
+    animation-delay: 2s;
+  }
+  @keyframes glitchLine {
+    0%{top:-10%; opacity:0}
+    10%{opacity:0.4}
+    90%{opacity:0.4}
+    100%{top:110%; opacity:0}
+  }
+
+  .hero-content {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--gwen-cyan);
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealUp 0.8s ease forwards 3.5s;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 15vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -2px;
+    opacity: 0;
+    transform: translateY(60px);
+    animation: revealUp 1s ease forwards 3.7s;
+  }
+
+  .hero-title .line-miles {
+    display: block;
+    background: linear-gradient(135deg, #fff 0%, var(--miles-red) 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 40px rgba(230,57,70,0.5));
+  }
+  .hero-title .amp {
+    font-size: 0.6em;
+    background: linear-gradient(135deg, var(--gwen-pink), var(--accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+  }
+  .hero-title .line-gwen {
+    display: block;
+    background: linear-gradient(135deg, var(--gwen-white), var(--gwen-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 40px rgba(0,245,255,0.4));
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 20px;
+    opacity: 0;
+    animation: revealUp 0.8s ease forwards 4.2s;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: revealUp 0.8s ease forwards 4.8s;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--gwen-pink), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:0.3;transform:scaleY(0.7)} }
+  .scroll-text { font-size: 0.65rem; letter-spacing: 4px; color: rgba(255,255,255,0.3); }
+
+  @keyframes revealUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 3D MODEL SECTION */
+  #model-section {
+    padding: 120px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #model-section::before {
+    content: 'SPIDER-VERSE';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 15vw;
+    color: rgba(255,255,255,0.02);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .model-container {
+    position: relative;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(230,57,70,0.05), rgba(0,245,255,0.05));
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  model-viewer {
+    width: 100%; height: 100%;
+    background: transparent;
+  }
+
+  .model-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 80%, rgba(230,57,70,0.2), transparent 70%);
+    pointer-events: none;
+    border-radius: 20px;
+  }
+
+  .model-info { position: relative; z-index: 2; }
+  .section-tag {
+    font-size: 0.75rem; letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gwen-pink);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--gwen-pink);
+    display: block;
+  }
+
+  .section-title {
+    font-family: var(--font-hero);
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.9;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+
+  .section-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .stat-row {
+    display: flex; gap: 40px;
+    margin-top: 40px;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-top: 4px;
+  }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* CHARACTERS SECTION */
+  #characters {
+    padding: 120px 60px;
+    background: linear-gradient(180deg, transparent, rgba(230,57,70,0.03), transparent);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .chars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .char-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: none;
+    group: true;
+    transition: transform 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .char-card:hover { transform: translateY(-12px) scale(1.02); }
+
+  .char-img-wrap {
+    position: relative;
+    height: 450px;
+    overflow: hidden;
+  }
+  .char-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s ease;
+    filter: saturate(0.8);
+  }
+  .char-card:hover .char-img-wrap img {
+    transform: scale(1.08);
+    filter: saturate(1.2);
+  }
+
+  .char-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.3) 50%, transparent 100%);
+  }
+
+  .char-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 40px;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+  }
+  .char-card:hover .char-content { transform: translateY(0); }
+
+  .char-role {
+    font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gwen-cyan); margin-bottom: 8px;
+  }
+  .char-name {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .char-bio {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .char-card:hover .char-bio { max-height: 100px; }
+
+  .char-badge {
+    position: absolute; top: 24px; right: 24px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    border: 2px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.4);
+    transition: transform 0.4s ease, border-color 0.3s ease;
+  }
+  .char-card:hover .char-badge { transform: rotate(360deg) scale(1.2); border-color: var(--accent-gold); }
+
+  .miles-card .char-overlay { background: linear-gradient(to top, rgba(10,10,30,0.97) 0%, rgba(230,57,70,0.15) 50%, transparent 100%); }
+  .gwen-card .char-overlay { background: linear-gradient(to top, rgba(5,5,15,0.97) 0%, rgba(255,0,110,0.15) 50%, transparent 100%); }
+
+  /* GALLERY */
+  #gallery {
+    padding: 120px 60px;
+    position: relative;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 280px);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: none;
+  }
+  .gallery-item:first-child { grid-column: span 2; }
+  .gallery-item:last-child { grid-column: span 2; grid-row: 2; }
+
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.4s ease;
+    filter: grayscale(0.2);
+  }
+  .gallery-item:hover img { transform: scale(1.06); filter: grayscale(0) saturate(1.3); }
+
+  .gallery-item-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(230,57,70,0.3), rgba(255,0,110,0.2));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+
+  .gallery-plus {
+    width: 50px; height: 50px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+    transform: scale(0);
+    transition: transform 0.3s ease 0.1s;
+  }
+  .gallery-item:hover .gallery-plus { transform: scale(1); }
+
+  /* SUNFLOWER SECTION */
+  #connection {
+    padding: 120px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .connection-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,0,110,0.08) 0%, transparent 70%);
+  }
+
+  .sunflower-hero {
+    position: relative;
+    max-width: 800px;
+    margin: 60px auto;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .sunflower-hero img {
+    width: 100%; height: 500px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .sunflower-hero:hover img { transform: scale(1.04); }
+
+  .sunflower-quote {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 50px 60px 40px;
+    background: linear-gradient(to top, rgba(5,5,8,0.97), transparent);
+  }
+  .quote-text {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 12px;
+  }
+  .quote-attr { font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gwen-pink); }
+
+  /* FOOTER */
+  footer {
+    padding: 60px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    letter-spacing: 5px;
+    background: linear-gradient(90deg, var(--miles-red), var(--gwen-pink), var(--gwen-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+  .footer-sub { font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.2); }
+
+  /* WEB STRANDS DECORATION */
+  .web-decoration {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.06;
+  }
+
+  /* HOVER TILT */
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+  }
+
+  /* SPIDER CRAWL */
+  .spider-icon {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* GLITCH TEXT */
+  .glitch {
+    position: relative;
+  }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .glitch::before {
+    left: 2px;
+    background: linear-gradient(135deg, var(--miles-red), var(--gwen-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glitch1 3s ease-in-out infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  }
+  .glitch::after {
+    left: -2px;
+    background: linear-gradient(135deg, var(--gwen-cyan), var(--gwen-white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glitch2 3s ease-in-out infinite 0.1s;
+    clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch1 {
+    0%,90%,100%{transform:none; opacity:0}
+    92%{transform:translateX(-3px); opacity:1}
+    94%{transform:translateX(3px); opacity:1}
+    96%{transform:none; opacity:0}
+  }
+  @keyframes glitch2 {
+    0%,90%,100%{transform:none; opacity:0}
+    93%{transform:translateX(3px); opacity:1}
+    95%{transform:translateX(-3px); opacity:1}
+    97%{transform:none; opacity:0}
+  }
+
+  /* COMIC DOTS PATTERN */
+  .comic-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,0,110,0.06) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+
+  /* SPLIT LAYOUT */
+  #about-miles {
+    padding: 120px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+
+  #about-gwen {
+    padding: 120px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,0,110,0.04) 0%, transparent 50%);
+  }
+
+  .about-img {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 550px;
+  }
+  .about-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .about-img:hover img { transform: scale(1.05); }
+
+  .about-img-border {
+    position: absolute; inset: -2px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, var(--miles-red), transparent, var(--gwen-cyan));
+    z-index: -1;
+    opacity: 0.5;
+  }
+
+  .ability-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .ability-list li {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.65);
+    padding: 10px 16px;
+    border-left: 2px solid transparent;
+    transition: all 0.3s ease;
+    border-radius: 0 8px 8px 0;
+  }
+  .ability-list li:hover {
+    background: rgba(255,255,255,0.04);
+    border-left-color: var(--gwen-pink);
+    color: #fff;
+    transform: translateX(8px);
+  }
+  .ability-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-red { background: var(--miles-red); box-shadow: 0 0 8px var(--miles-red); }
+  .dot-cyan { background: var(--gwen-cyan); box-shadow: 0 0 8px var(--gwen-cyan); }
+  .dot-pink { background: var(--gwen-pink); box-shadow: 0 0 8px var(--gwen-pink); }
+  .dot-gold { background: var(--accent-gold); box-shadow: 0 0 8px var(--accent-gold); }
+
+  /* CTA BUTTON */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--miles-red), var(--gwen-pink));
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none; cursor: none;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--gwen-pink), var(--gwen-cyan));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(230,57,70,0.4); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #model-section, #about-miles, #about-gwen { grid-template-columns: 1fr; padding: 60px 24px; }
+    .chars-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gallery-item:first-child, .gallery-item:last-child { grid-column: span 1; }
+    #hero, #connection, #gallery { padding: 60px 24px; }
+    #gallery { padding: 60px 24px; }
+  }
+
+  /* NOISE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9997; opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-web">
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="55" stroke="rgba(255,0,110,0.3)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="40" stroke="rgba(0,245,255,0.3)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="25" stroke="rgba(255,0,110,0.5)" stroke-width="1"/>
+      <line x1="60" y1="5" x2="60" y2="115" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+      <line x1="5" y1="60" x2="115" y2="60" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+      <line x1="21" y1="21" x2="99" y2="99" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+      <line x1="99" y1="21" x2="21" y2="99" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+      <circle cx="60" cy="5" r="3" fill="#ff006e"/>
+      <circle cx="60" cy="115" r="3" fill="#ff006e"/>
+      <circle cx="5" cy="60" r="3" fill="#00f5ff"/>
+      <circle cx="115" cy="60" r="3" fill="#00f5ff"/>
+      <circle cx="21" cy="21" r="2" fill="rgba(255,255,255,0.5)"/>
+      <circle cx="99" cy="99" r="2" fill="rgba(255,255,255,0.5)"/>
+    </svg>
+  </div>
+  <div class="loader-text">SPIDER-VERSE</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SPIDER — VERSE</div>
+  <ul class="nav-links">
+    <li><a href="#model-section" class="cursor-hover">3D Model</a></li>
+    <li><a href="#about-miles" class="cursor-hover">Miles</a></li>
+    <li><a href="#about-gwen" class="cursor-hover">Gwen</a></li>
+    <li><a href="#gallery" class="cursor-hover">Gallery</a></li>
+  </ul>
+  <button class="sound-btn cursor-hover" id="soundToggle">♪ SUNFLOWER</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="halftone"></div>
+  <div class="glitch-lines"></div>
+
+  <div class="parallax-scene" id="parallaxScene">
+    <div class="parallax-layer layer-1" data-depth="0.1">
+      <img src="assets/peakpx__3_.jpg" class="bg-img" alt="">
     </div>
   </div>
 
-  <div class="divider"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Into The Spider-Verse — A Love Story Across Dimensions</div>
+    <h1 class="hero-title">
+      <span class="line-miles glitch" data-text="MILES">MILES</span>
+      <span class="amp">&amp;</span>
+      <span class="line-gwen">GWEN</span>
+    </h1>
+    <p class="hero-sub">Two worlds. One thread.</p>
+  </div>
 
-  <!-- Card 2 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(1).jpg" alt="Miles, Gwen and Peter in city" loading="lazy"/>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- 3D MODEL SECTION -->
+<section id="model-section">
+  <div class="comic-dots"></div>
+
+  <div class="model-container reveal-left">
+    <model-viewer
+      src="assets/miles_y_gwen.glb"
+      alt="Miles & Gwen 3D Model"
+      auto-rotate
+      auto-rotate-delay="0"
+      rotation-per-second="20deg"
+      camera-controls
+      disable-zoom
+      shadow-intensity="1"
+      exposure="0.8"
+      environment-image="neutral"
+      style="background: transparent;"
+    ></model-viewer>
+    <div class="model-glow"></div>
+  </div>
+
+  <div class="model-info reveal-right">
+    <div class="section-tag">Interactive 3D Model</div>
+    <h2 class="section-title">ACROSS THE<br><span style="background: linear-gradient(135deg, var(--miles-red), var(--gwen-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MULTIVERSE</span></h2>
+    <p class="section-body">Miles Morales and Gwen Stacy — two Spider-People from different dimensions brought together by destiny, friendship, and the web of fate that binds all things. Drag the model to see them from every angle.</p>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-label">Dimensions</div></div>
+      <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Possibilities</div></div>
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-label">Connection</div></div>
     </div>
-    <div class="card-body">
-      <span class="card-num">02</span>
-      <p class="card-tag">Alliance</p>
-      <h2 class="card-title">Spider-People Unite</h2>
-      <p class="card-desc">When the multiverse cracks open, Miles teams up with Gwen Stacy and Peter B. Parker. Different dimensions, different styles — but the same unstoppable spider-sense.</p>
+  </div>
+</section>
+
+<!-- ABOUT MILES -->
+<section id="about-miles">
+  <div class="about-img reveal-left tilt-card">
+    <div class="about-img-border"></div>
+    <img src="assets/peakpx__5_.jpg" alt="Miles Morales">
+  </div>
+
+  <div class="reveal-right" style="position:relative;z-index:2">
+    <div class="section-tag">Earth-1610</div>
+    <h2 class="section-title" style="background: linear-gradient(135deg, #fff, var(--miles-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MILES<br>MORALES</h2>
+    <p class="section-body">A Brooklyn teenager bitten by a radioactive spider from another dimension. Miles didn't ask to be Spider-Man — he earned it. With raw power, venom strike, and invisibility, he's unlike any Spider before him. He's the kind of hero the world needs now.</p>
+
+    <ul class="ability-list">
+      <li><span class="ability-dot dot-red"></span>Bio-Electrokinesis — Venom Strike</li>
+      <li><span class="ability-dot dot-cyan"></span>Camouflage / Invisibility</li>
+      <li><span class="ability-dot dot-gold"></span>Enhanced Spider-Sense</li>
+      <li><span class="ability-dot dot-pink"></span>Wall-Crawling & Web-Slinging</li>
+      <li><span class="ability-dot dot-red"></span>Artist, Musician & Student at SAFV</li>
+    </ul>
+
+    <div style="margin-top:36px;">
+      <a href="#gallery" class="btn-primary cursor-hover"><span>View Gallery</span><span>→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT GWEN -->
+<section id="about-gwen">
+  <div class="reveal-left" style="position:relative;z-index:2">
+    <div class="section-tag">Earth-65</div>
+    <h2 class="section-title" style="background: linear-gradient(135deg, var(--gwen-white), var(--gwen-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">GWEN<br>STACY</h2>
+    <p class="section-body">In her universe, Gwen was bitten — not Peter. Ghost-Spider of Earth-65, a ballet dancer, drummer, and reluctant hero navigating dimension-hopping while searching for the one person who feels like home. Graceful in combat, fierce in heart.</p>
+
+    <ul class="ability-list">
+      <li><span class="ability-dot dot-cyan"></span>Dimension-Hopping via Watch</li>
+      <li><span class="ability-dot dot-pink"></span>Acrobatic Combat Style</li>
+      <li><span class="ability-dot dot-gold"></span>Enhanced Reflexes & Agility</li>
+      <li><span class="ability-dot dot-red"></span>Web-Slinging & Wall-Crawling</li>
+      <li><span class="ability-dot dot-cyan"></span>Musician — The Mary Janes</li>
+    </ul>
+
+    <div style="margin-top:36px;">
+      <a href="#connection" class="btn-primary cursor-hover" style="background: linear-gradient(135deg, var(--gwen-pink), var(--gwen-cyan));"><span>Their Story</span><span>→</span></a>
     </div>
   </div>
 
-  <div class="divider"></div>
+  <div class="about-img reveal-right tilt-card">
+    <div class="about-img-border" style="background: linear-gradient(135deg, var(--gwen-pink), transparent, var(--gwen-cyan));"></div>
+    <img src="assets/peakpx__4_.jpg" alt="Gwen Stacy">
+  </div>
+</section>
 
-  <!-- Card 3 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(2).jpg" alt="Miles giving Gwen a sunflower" loading="lazy"/>
-    </div>
-    <div class="card-body">
-      <span class="card-num">03</span>
-      <p class="card-tag">Connection</p>
-      <h2 class="card-title">A Sunflower for You</h2>
-      <p class="card-desc">In between battles and dimension-hops, a quiet moment: a sunflower. Miles and Gwen share something no canon event can erase — a connection that defies every universe's rules.</p>
-    </div>
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header reveal">
+    <div class="section-tag" style="justify-content:center; margin-bottom:12px;">Artwork Gallery</div>
+    <h2 class="section-title" style="font-size: clamp(3rem, 7vw, 7rem);">THE MULTIVERSE<br><span style="background: linear-gradient(90deg, var(--gwen-pink), var(--gwen-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">IN FRAMES</span></h2>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- Card 4 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(3).jpg" alt="Gwen and Miles action art" loading="lazy"/>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item">
+      <img src="assets/peakpx.jpg" alt="Spider-Verse Trio">
+      <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
-    <div class="card-body">
-      <span class="card-num">04</span>
-      <p class="card-tag">Power</p>
-      <h2 class="card-title">Ghost-Spider</h2>
-      <p class="card-desc">Gwen Stacy of Earth-65 is Ghost-Spider: precise, fearless, and draped in the most iconic suit in any verse. She swings through watercolour skies like the city itself is her canvas.</p>
+    <div class="gallery-item">
+      <img src="assets/peakpx__6_.jpg" alt="Miles & Gwen Resting">
+      <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Card 5 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(4).jpg" alt="Miles and Gwen together on webs" loading="lazy"/>
+    <div class="gallery-item">
+      <img src="assets/peakpx__4_.jpg" alt="Gwen Action">
+      <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
-    <div class="card-body">
-      <span class="card-num">05</span>
-      <p class="card-tag">Together</p>
-      <h2 class="card-title">Web of Trust</h2>
-      <p class="card-desc">Side by side, they're unstoppable. Miles's Venom blast and Gwen's razor-sharp agility complement each other perfectly — a duo written in the stars of every Spider-Verse timeline.</p>
+    <div class="gallery-item">
+      <img src="assets/peakpx__1_.jpg" alt="Miles & Gwen Sunset">
+      <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
+    </div>
+    <div class="gallery-item">
+      <img src="assets/peakpx__5_.jpg" alt="Miles & Gwen Fight">
+      <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
   </div>
+</section>
 
-  <div class="divider"></div>
-
-  <!-- Card 6 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(5).jpg" alt="Miles and Gwen watching sunset" loading="lazy"/>
-    </div>
-    <div class="card-body">
-      <span class="card-num">06</span>
-      <p class="card-tag">Horizon</p>
-      <h2 class="card-title">Rooftop at Dusk</h2>
-      <p class="card-desc">Above the city's chaos, two Spider-People sit quietly. No masks needed in this moment — just two teenagers watching the sun dissolve into a skyline they've sworn to protect.</p>
-    </div>
+<!-- CONNECTION SECTION -->
+<section id="connection">
+  <div class="connection-bg"></div>
+  <div class="reveal">
+    <div class="section-tag" style="justify-content:center; margin-bottom:12px;">Their Bond</div>
+    <h2 class="section-title" style="font-size: clamp(3rem, 8vw, 8rem);">A SUNFLOWER<br><span style="background: linear-gradient(90deg, var(--accent-gold), var(--gwen-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BETWEEN WORLDS</span></h2>
+    <p class="section-body" style="max-width: 600px; margin: 20px auto; font-size: 1.1rem;">Across dimensions and timelines, two spider-people found something neither expected — each other. A sunflower bridging impossible distances.</p>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- Card 7 -->
-  <div class="card">
-    <div class="card-img">
-      <img src="https://cdn.jsdelivr.net/gh/adiisharma940-lab/spider@main/assets/peakpx%20(6).jpg" alt="Miles and Gwen resting back to back" loading="lazy"/>
-    </div>
-    <div class="card-body">
-      <span class="card-num">07</span>
-      <p class="card-tag">Rest</p>
-      <h2 class="card-title">Back to Back</h2>
-      <p class="card-desc">Even heroes need to breathe. Back to back, exhausted but alive, Miles and Gwen remind us that the bravest thing isn't always the swing — sometimes it's simply staying.</p>
+  <div class="sunflower-hero reveal">
+    <img src="assets/peakpx__2_.jpg" alt="Miles offers Gwen a Sunflower">
+    <div class="sunflower-quote">
+      <p class="quote-text">"You're the only one who makes me feel like I belong."</p>
+      <p class="quote-attr">Miles Morales — Earth 1610</p>
     </div>
   </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SPIDER — VERSE</div>
+  <p class="footer-sub">Miles Morales & Gwen Stacy — Across the Spider-Verse</p>
+</footer>
+
+<!-- AUDIO -->
+<audio id="soundtrack" loop>
+  <source src="assets/Post_Malone__Swae_Lee_-_Sunflower__ringtone_.mp3" type="audio/mpeg">
+</audio>
+
+<!-- model-viewer -->
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2800);
+});
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+let mouseX = 0, mouseY = 0;
+let dotX = 0, dotY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+// Smooth dot follow
+function animateDot() {
+  dotX += (mouseX - dotX) * 0.15;
+  dotY += (mouseY - dotY) * 0.15;
+  cursorDot.style.left = dotX + 'px';
+  cursorDot.style.top = dotY + 'px';
+  requestAnimationFrame(animateDot);
+}
+animateDot();
+
+document.querySelectorAll('.cursor-hover, a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// PARALLAX
+const scene = document.getElementById('parallaxScene');
+const layers = document.querySelectorAll('.parallax-layer');
+
+document.addEventListener('mousemove', e => {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  const dx = (e.clientX - cx) / cx;
+  const dy = (e.clientY - cy) / cy;
+
+  layers.forEach(layer => {
+    const depth = parseFloat(layer.dataset.depth) || 0.1;
+    layer.style.transform = `translate(${dx * depth * 40}px, ${dy * depth * 40}px)`;
+  });
+});
+
+// SOUND TOGGLE
+const audio = document.getElementById('soundtrack');
+const soundBtn = document.getElementById('soundToggle');
+let isPlaying = false;
+
+soundBtn.addEventListener('click', () => {
+  if (isPlaying) {
+    audio.pause();
+    soundBtn.textContent = '♪ SUNFLOWER';
+    soundBtn.classList.remove('playing');
+  } else {
+    audio.play().catch(()=>{});
+    soundBtn.textContent = '⏸ PLAYING';
+    soundBtn.classList.add('playing');
+  }
+  isPlaying = !isPlaying;
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, i * 100);
+    }
+  });
+}, { threshold: 0.15 });
+
+reveals.forEach(el => revealObs.observe(el));
+
+// TILT CARDS
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) translateZ(10px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// GALLERY ITEM TILT
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('mousemove', e => {
+    const rect = item.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    item.style.transform = `perspective(600px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateZ(5px)`;
+  });
+  item.addEventListener('mouseleave', () => {
+    item.style.transform = '';
+  });
+});
+
+// MAGNETIC BUTTONS
+document.querySelectorAll('.btn-primary').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translateY(-3px) translate(${x * 0.2}px, ${y * 0.2}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+
+// WEB STRAND EFFECT ON CLICK
+document.addEventListener('click', e => {
+  const ripple = document.createElement('div');
+  ripple.style.cssText = `
+    position: fixed;
+    left: ${e.clientX}px; top: ${e.clientY}px;
+    width: 0; height: 0;
+    border: 2px solid rgba(255,0,110,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9996;
+    transform: translate(-50%, -50%);
+    animation: webRipple 0.6s ease-out forwards;
+  `;
+  document.body.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+});
+
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes webRipple {
+    to { width: 80px; height: 80px; opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
+
+// ABILITY LIST STAGGER
+document.querySelectorAll('.ability-list li').forEach((li, i) => {
+  li.style.transitionDelay = `${i * 0.05}s`;
+});
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// COUNTER ANIMATION
+function animateCounter(el, target, suffix='') {
+  let current = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.floor(current) + suffix;
+  }, 16);
+}
+
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.stat-num').forEach(num => {
+        const txt = num.textContent;
+        if (txt === '2') animateCounter(num, 2);
+        else if (txt === '1') animateCounter(num, 1);
+      });
+      statsObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-row').forEach(r => statsObs.observe(r));
+</script>
+</body>
+</html>
