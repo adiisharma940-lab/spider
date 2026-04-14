@@ -30,6 +30,7 @@
     font-family: var(--font-body);
     cursor: none;
     overflow-x: hidden;
+    max-width: 100vw;
   }
 
   /* CUSTOM CURSOR */
@@ -68,17 +69,6 @@
   }
   #loader.hidden { opacity: 0; visibility: hidden; }
 
-  .loader-web {
-    width: 120px; height: 120px;
-    position: relative;
-    margin-bottom: 30px;
-  }
-  .loader-web svg {
-    animation: webSpin 2s linear infinite;
-    filter: drop-shadow(0 0 15px var(--gwen-pink));
-  }
-  @keyframes webSpin { to { transform: rotate(360deg); } }
-
   .loader-text {
     font-family: var(--font-display);
     font-size: 2rem;
@@ -101,9 +91,51 @@
     height: 100%;
     background: linear-gradient(90deg, var(--miles-red), var(--gwen-pink));
     width: 0%;
-    animation: loadBar 2.5s ease forwards;
+    transition: width 0.4s ease;
   }
   @keyframes loadBar { to { width: 100%; } }
+
+  .loader-model-preview {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(255,0,110,0.3);
+    box-shadow: 0 0 60px rgba(255,0,110,0.2), inset 0 0 40px rgba(0,0,0,0.5);
+    margin-bottom: 30px;
+    position: relative;
+  }
+  .loader-model-preview model-viewer {
+    width: 100%; height: 100%;
+  }
+  .loader-model-ring {
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--gwen-pink);
+    border-right-color: var(--gwen-cyan);
+    animation: ringSpinA 1.5s linear infinite;
+    pointer-events: none;
+  }
+  .loader-model-ring2 {
+    position: absolute; inset: -14px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-bottom-color: rgba(255,0,110,0.4);
+    animation: ringSpinB 2.5s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes ringSpinA { to { transform: rotate(360deg); } }
+  @keyframes ringSpinB { to { transform: rotate(-360deg); } }
+
+  .loader-status {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-top: 12px;
+    min-height: 18px;
+  }
 
   /* NAV */
   nav {
@@ -318,6 +350,7 @@
     align-items: center;
     position: relative;
     overflow: hidden;
+    max-width: 100vw;
   }
   #model-section::before {
     content: 'SPIDER-VERSE';
@@ -329,20 +362,26 @@
     transform: translate(-50%, -50%);
     white-space: nowrap;
     pointer-events: none;
+    z-index: 0;
   }
 
   .model-container {
     position: relative;
-    height: 500px;
+    height: 520px;
     border-radius: 20px;
     overflow: hidden;
     background: linear-gradient(135deg, rgba(230,57,70,0.05), rgba(0,245,255,0.05));
     border: 1px solid rgba(255,255,255,0.08);
+    contain: layout paint;
+    z-index: 1;
   }
 
   model-viewer {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     background: transparent;
+    --poster-color: transparent;
+    display: block;
   }
 
   .model-glow {
@@ -716,6 +755,8 @@
     gap: 80px;
     align-items: center;
     position: relative;
+    overflow: hidden;
+    max-width: 100vw;
   }
 
   #about-gwen {
@@ -726,6 +767,8 @@
     align-items: center;
     position: relative;
     background: linear-gradient(135deg, rgba(255,0,110,0.04) 0%, transparent 50%);
+    overflow: hidden;
+    max-width: 100vw;
   }
 
   .about-img {
@@ -838,25 +881,24 @@
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-web">
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="55" stroke="rgba(255,0,110,0.3)" stroke-width="1"/>
-      <circle cx="60" cy="60" r="40" stroke="rgba(0,245,255,0.3)" stroke-width="1"/>
-      <circle cx="60" cy="60" r="25" stroke="rgba(255,0,110,0.5)" stroke-width="1"/>
-      <line x1="60" y1="5" x2="60" y2="115" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-      <line x1="5" y1="60" x2="115" y2="60" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-      <line x1="21" y1="21" x2="99" y2="99" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-      <line x1="99" y1="21" x2="21" y2="99" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-      <circle cx="60" cy="5" r="3" fill="#ff006e"/>
-      <circle cx="60" cy="115" r="3" fill="#ff006e"/>
-      <circle cx="5" cy="60" r="3" fill="#00f5ff"/>
-      <circle cx="115" cy="60" r="3" fill="#00f5ff"/>
-      <circle cx="21" cy="21" r="2" fill="rgba(255,255,255,0.5)"/>
-      <circle cx="99" cy="99" r="2" fill="rgba(255,255,255,0.5)"/>
-    </svg>
+  <div class="loader-model-preview">
+    <model-viewer
+      id="loaderModel"
+      src="assets/miles_y_gwen.glb"
+      alt="Loading..."
+      auto-rotate
+      auto-rotate-delay="0"
+      rotation-per-second="30deg"
+      disable-zoom
+      exposure="0.9"
+      style="background: transparent;"
+    ></model-viewer>
+    <div class="loader-model-ring"></div>
+    <div class="loader-model-ring2"></div>
   </div>
   <div class="loader-text">SPIDER-VERSE</div>
-  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-status" id="loaderStatus">Loading 3D model...</div>
 </div>
 
 <!-- NAV -->
@@ -879,7 +921,7 @@
 
   <div class="parallax-scene" id="parallaxScene">
     <div class="parallax-layer layer-1" data-depth="0.1">
-      <img src="assets/peakpx (4).jpg" class="bg-img" alt="">
+      <img src="assets/peakpx__4_.jpg" class="bg-img" alt="">
     </div>
   </div>
 
@@ -936,7 +978,7 @@
 <section id="about-miles">
   <div class="about-img reveal-left tilt-card">
     <div class="about-img-border"></div>
-    <img src="assets/peakpx (1).jpg" alt="Miles Morales">
+    <img src="assets/peakpx__1_.jpg" alt="Miles Morales">
   </div>
 
   <div class="reveal-right" style="position:relative;z-index:2">
@@ -980,7 +1022,7 @@
 
   <div class="about-img reveal-right tilt-card">
     <div class="about-img-border" style="background: linear-gradient(135deg, var(--gwen-pink), transparent, var(--gwen-cyan));"></div>
-    <img src="assets/peakpx (5).jpg" alt="Gwen Stacy">
+    <img src="assets/peakpx__5_.jpg" alt="Gwen Stacy">
   </div>
 </section>
 
@@ -997,19 +1039,19 @@
       <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
     <div class="gallery-item">
-      <img src="assets/peakpx (2).jpg" alt="Miles & Gwen Red Background">
+      <img src="assets/peakpx__2_.jpg" alt="Miles & Gwen Red Background">
       <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
     <div class="gallery-item">
-      <img src="assets/peakpx (4).jpg" alt="Brooklyn Bridge City">
+      <img src="assets/peakpx__4_.jpg" alt="Brooklyn Bridge City">
       <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
     <div class="gallery-item">
-      <img src="assets/peakpx (6).jpg" alt="Miles & Gwen Fight Pose">
+      <img src="assets/peakpx__6_.jpg" alt="Miles & Gwen Fight Pose">
       <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
     <div class="gallery-item">
-      <img src="assets/peakpx (5).jpg" alt="Gwen Action Art">
+      <img src="assets/peakpx__5_.jpg" alt="Gwen Action Art">
       <div class="gallery-item-overlay"><div class="gallery-plus">+</div></div>
     </div>
   </div>
@@ -1025,7 +1067,7 @@
   </div>
 
   <div class="sunflower-hero reveal">
-    <img src="assets/peakpx (3).jpg" alt="Miles offers Gwen a Sunflower">
+    <img src="assets/peakpx__3_.jpg" alt="Miles offers Gwen a Sunflower">
     <div class="sunflower-quote">
       <p class="quote-text">"You're the only one who makes me feel like I belong."</p>
       <p class="quote-attr">Miles Morales — Earth 1610</p>
@@ -1041,19 +1083,60 @@
 
 <!-- AUDIO -->
 <audio id="soundtrack" loop>
-  <source src="assets/Post Malone, Swae_Lee - Sunflower (ringtone).mp3" type="audio/mpeg">
+  <source src="assets/Post_Malone__Swae_Lee_-_Sunflower__ringtone_.mp3" type="audio/mpeg">
 </audio>
 
 <!-- model-viewer -->
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
 <script>
-// LOADER
+// LOADER — wait for 3D model to fully load
+const loaderEl = document.getElementById('loader');
+const loaderBar = document.getElementById('loaderBar');
+const loaderStatus = document.getElementById('loaderStatus');
+const loaderModel = document.getElementById('loaderModel');
+
+let modelReady = false;
+let pageReady = false;
+
+function tryDismissLoader() {
+  if (modelReady && pageReady) {
+    loaderBar.style.width = '100%';
+    loaderStatus.textContent = 'Ready';
+    setTimeout(() => loaderEl.classList.add('hidden'), 600);
+  }
+}
+
+// Simulate page asset progress
+let progress = 0;
+const progressInterval = setInterval(() => {
+  progress = Math.min(progress + Math.random() * 8, 85);
+  loaderBar.style.width = progress + '%';
+}, 120);
+
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hidden');
-  }, 2800);
+  pageReady = true;
+  clearInterval(progressInterval);
+  loaderBar.style.width = '90%';
+  tryDismissLoader();
 });
+
+// Wait for model-viewer to fire its load event
+loaderModel.addEventListener('load', () => {
+  modelReady = true;
+  loaderStatus.textContent = '3D model loaded ✓';
+  loaderBar.style.width = '95%';
+  tryDismissLoader();
+});
+
+// Fallback: if model takes too long (e.g. slow connection), dismiss after 8s
+setTimeout(() => {
+  if (!modelReady) {
+    modelReady = true;
+    loaderStatus.textContent = 'Ready';
+    tryDismissLoader();
+  }
+}, 8000);
 
 // CURSOR
 const cursor = document.getElementById('cursor');
